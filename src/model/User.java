@@ -1,6 +1,6 @@
 package model;
 
-public class User implements Comparable<User> {
+public class User {
 	
 	public User(String id, String fullName, int version, String insurer) {
 		this.id = id;
@@ -13,7 +13,6 @@ public class User implements Comparable<User> {
 	private String fullName;
 	private int version;
 	private String insurer;
-	private String firstName;
 	private String lastName;
 
 	public String getId() {
@@ -44,10 +43,5 @@ public class User implements Comparable<User> {
 		String[] nameSplit = getFullName().split(" ");
 		String lastName = nameSplit[1];
 		return lastName;
-	}
-	
-	@Override
-	public int compareTo(User o) {
-		return getLastName().compareTo(o.getLastName());
 	}
 }

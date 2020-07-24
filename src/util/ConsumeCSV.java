@@ -6,8 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
+
 import java.util.*;
 import java.nio.charset.StandardCharsets;
 
@@ -15,8 +14,6 @@ import model.User;
 
 public class ConsumeCSV {
 	
-//	private static Map<String, User> idToUserMap = new HashMap<String, User>();
-//	private static HashMap<String, Map<String, User>> insurerToUsersMap = new HashMap<String, Map<String, User>>();
 	private static List<User> users = new ArrayList<User>();
 
 	public void readFromCSV(String fileName) throws ParseException, IOException {
@@ -31,22 +28,22 @@ public class ConsumeCSV {
 				 String[] row = line.split(",");
 				 
 				 User user = new User(row[0], row[1], Integer.parseInt(row[2]), row[3]);
-				 users.add(user);
 				 
-				 //addIdToUserToInsurerToIdToUserMap(row);
+				 if(users.size() > 0) {
+					 checkForSameInsurersAndIds(users, user);
+				 } else {
+					 users.add(user);
+				 }
+				 
+				 sortListByLastName(users);
 				 
 				 line = br.readLine();
 			 }
 		} catch(Exception e) {
-			
+			System.out.println(e);
 		}
 		
-		sortListByLastName(users);
-		
-		for(int i = 0; i < users.size(); i ++) {
-			System.out.println(users.get(i).getId() + " " + users.get(i).getFullName() + " " + users.get(i).getVersion() + " " + users.get(i).getInsurer());
-		}
-		//printMap();
+		ExportToCSV.exportToCSV(users);
 	}
 	
 	private void sortListByLastName(List<User >users) {
@@ -60,46 +57,22 @@ public class ConsumeCSV {
 		}
 	}
 	
-//	private static void addIdToUserToInsurerToIdToUserMap(String[] row) {
-//		User user = new User(row[0], row[1], Integer.parseInt(row[2]), row[3]);
-//		String insuranceCo = row[3];
-//		
-//		if(!insurerToUsersMap.containsKey(insuranceCo)) {
-//			insurerToUsersMap.put(insuranceCo, addUserToIdToUserMap(user));
-//		}
-//		
-//		User nestedUser = insurerToUsersMap.get(insuranceCo).get(user.getId());
-//		if(nestedUser != null) {
-//			if(nestedUser.getVersion() < user.getVersion()) {
-//				insurerToUsersMap.get(insuranceCo).put(user.getId(),  user);
-//			}
-//		} else {
-//			insurerToUsersMap.get(insuranceCo).put(user.getId(), user);
-//		}
-//	}
-//	
-//	private static Map<String, User> addUserToIdToUserMap(User user) {
-//		 
-//		 idToUserMap.put(user.getId(), user);
-//		 
-//		 return idToUserMap;
-//	}
-//	
-//	private static void printMap() {
-//		Iterator iterator = insurerToUsersMap.keySet().iterator();
-//		
-//		while(iterator.hasNext()) {
-//		       String key = iterator.next().toString();
-//		       Map<String, User> idToUserMap = insurerToUsersMap.get(key);
-//		       
-//		       Iterator iterator2 = idToUserMap.keySet().iterator();
-//		       
-//		       while(iterator2.hasNext()) {
-//			       String key2 = iterator2.next().toString();
-//			       User value = idToUserMap.get(key2);
-//		       
-//			       System.out.println(key + value.getId() + value.getFullName() + value.getVersion());
-//		       }
-//		}
-//	}
+	private void checkForSameInsurersAndIds(List<User> users, User user) {
+		Boolean addUser = true;
+		
+		 for(int i = 0; i <= users.size()-1; i++) {
+			 if(users.get(i).getInsurer().equals(user.getInsurer()) && users.get(i).getId().equals(user.getId())) {
+				 if(user.getVersion() > users.get(i).getVersion()) {
+					 users.remove(i);
+					 break;
+				 } else {
+					 addUser = false;
+					 break;
+				 }
+			 } 
+		 }
+		 if(addUser) {
+			 users.add(user);		 
+		 }
+	}
 }
