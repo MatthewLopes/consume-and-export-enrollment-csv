@@ -14,6 +14,11 @@ public class ExportToCSV {
 		String folder = "src\\results\\";
 		
 		try{
+			File directory = new File(folder);
+			File[] files = directory.listFiles();
+			for(File file : files) {
+				file.delete();
+			}
 			for(int i = 0; i < users.size(); i++) {
 				File file = new File(folder + users.get(i).getInsurer() + ".csv");
 				FileWriter fr = new FileWriter(file, true);
@@ -26,6 +31,5 @@ public class ExportToCSV {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 }

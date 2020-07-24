@@ -13,7 +13,6 @@ public class User {
 	private String fullName;
 	private int version;
 	private String insurer;
-	private String lastName;
 
 	public String getId() {
 		return id;

@@ -2,8 +2,11 @@ package controller;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 
 import util.ConsumeCSV;
+import util.ExportToCSV;
+import model.User;
 
 public class Main {
 
@@ -12,7 +15,10 @@ public class Main {
 		String fileName = "src\\EnrollmentFile.csv";
 		
 		ConsumeCSV consumeCSV = new ConsumeCSV();
-		consumeCSV.readFromCSV(fileName);
+		
+		final List<User> users = consumeCSV.readFromCSV(fileName);
+		
+		ExportToCSV.exportToCSV(users);
 		
 	}
 

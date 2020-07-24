@@ -16,7 +16,7 @@ public class ConsumeCSV {
 	
 	private static List<User> users = new ArrayList<User>();
 
-	public void readFromCSV(String fileName) throws ParseException, IOException {
+	public List<User> readFromCSV(String fileName) throws ParseException, IOException {
 		
 		Path pathToFile = Paths.get(fileName);
 		
@@ -43,10 +43,10 @@ public class ConsumeCSV {
 			System.out.println(e);
 		}
 		
-		ExportToCSV.exportToCSV(users);
+		return users;
 	}
 	
-	private void sortListByLastName(List<User >users) {
+	public static void sortListByLastName(List<User> users) {
 		if (users.size() > 0) {
 			  Collections.sort(users, new Comparator<User>() {
 			      @Override
@@ -57,7 +57,7 @@ public class ConsumeCSV {
 		}
 	}
 	
-	private void checkForSameInsurersAndIds(List<User> users, User user) {
+	public static void checkForSameInsurersAndIds(List<User> users, User user) {
 		Boolean addUser = true;
 		
 		 for(int i = 0; i <= users.size()-1; i++) {
